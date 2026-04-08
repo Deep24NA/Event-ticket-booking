@@ -51,7 +51,7 @@ Make sure you have the following installed on your machine:
 **1. Clone the Repository**
 ```bash
 git clone [https://github.com/Deep24NA/Event-ticket-booking.git](https://github.com/Deep24NA/Event-ticket-booking.git)
-cd eventtix
+cd Event-ticket-booking
 ```
 
 **2. Backend Setup**
