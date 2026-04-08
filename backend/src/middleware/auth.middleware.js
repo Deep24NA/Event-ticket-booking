@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 
 export const verifyJWT = async (req, res, next) => {
     try {
+
         // 1. Grab the token from the HTTP-only cookie OR the Authorization header (good for mobile apps)
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
         

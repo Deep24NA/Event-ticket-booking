@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createEvent, getAllEvents } from "../controllers/event.controller.js";
+import { createEvent, getAllEvents, getEventById } from "../controllers/event.controller.js";
 
 const router = Router();
 
@@ -8,5 +8,8 @@ router.post("/create", createEvent);
 
 // Route: GET /api/events
 router.get("/", getAllEvents);
+
+// Route: GET /api/events/:id
+router.get("/:id", getEventById);
 
 export default router;

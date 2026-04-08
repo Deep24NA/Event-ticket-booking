@@ -1,6 +1,6 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose from "mongoose";
 
-const bookingSchema = new Schema (
+const bookingSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -15,11 +15,23 @@ const bookingSchema = new Schema (
         ticketCount: {
             type: Number,
             required: true,
-            min: 0,
+            min: [1, "Must book at least 1 ticket"],
         },
+        totalAmount: {
+            type: Number,
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["Booked", "Cancelled", "Attended",], // "Attended" goes to the History tab!
+            default: "Booked",
+        },
+        isListedForResale: {
+            type: Boolean,
+            default: false,
+        }
     },
-    {timestamps: true},
+    { timestamps: true }
 );
 
-const Booking = mongoose.model("Booking" , bookingSchema);
-export default Booking;
+export default mongoose.model("Booking", bookingSchema);

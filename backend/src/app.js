@@ -5,7 +5,14 @@ import cors from "cors";
 const app = express();
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: (origin, callback) => {
+        // Allow requests from any localhost port (e.g. 5173, 5174, 3000)
+        if (!origin || /^http:\/\/localhost:\d+$/.test(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
 }));
 
@@ -17,6 +24,8 @@ app.use(urlencoded({
 app.use(json({
     limit: "16kb",
 }))
+
+app.use(cookieParser());
 
 
 
@@ -36,7 +45,6 @@ app.use("/api/booking" , bookingRouter);
 app.use("/api/resale", resaleRouter);
 
 
-app.use(cookieParser());
 
 
 export default app;

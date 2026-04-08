@@ -23,7 +23,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
 // Standardized cookie options for security
 const cookieOptions = {
     httpOnly: true, // Prevents JavaScript (XSS) from reading the cookie
-    secure: process.env.NODE_ENV === "production" // Only sends over HTTPS in production
+//    secure: process.env.NODE_ENV === "production" // Only sends over HTTPS in production
 };
 
 export const registerUser = async (req, res) => {
@@ -159,5 +159,37 @@ export const getUserProfile = async (req, res) => {
     } catch (error) {
         console.error("Profile Fetch Error:", error);
         res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
+export const logoutUser = async (req, res) => {
+    // We use the exact same options we used to create the cookie
+    const options = {
+        httpOnly: true,
+        // secure: true // (Keep this commented out for localhost!)
+    };
+
+    return res.status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json({ message: "User logged out successfully" });
+};
+
+// Save the Firebase Device Token
+export const updateFCMToken = async (req, res) => {
+    try {
+        const { fcmToken } = req.body;
+        const userId = req.user._id;
+
+        if (!fcmToken) return res.status(400).json({ message: "Token is required" });
+
+        // Find the user and update their token
+        await User.findByIdAndUpdate(userId, { fcmToken });
+
+        res.status(200).json({ message: "Notification token saved successfully" });
+    } catch (error) {
+        console.error("Save FCM Token Error:", error);
+        res.status(500).json({ message: "Failed to save token" });
     }
 };
